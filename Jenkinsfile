@@ -76,7 +76,7 @@ pipeline {
         always {
             archiveArtifacts artifacts: '**/target/calculator-1.0-SNAPSHOT.jar',
                 followSymlinks: false
-            junit testResults: '**/target/surefire-reports/*.xml'
+            junit testResults: '**/target/surefire-reports/*.xml',
                 stdioRetention: 'ALL'
         }
     }
