@@ -80,7 +80,9 @@ pipeline {
 
     post
     {
-        archiveArtifacts artifacts: '**/target/calculator-1.0-SNAPSHOT.jar', followSymlinks: false
-        junit stdioRetention: 'ALL', testResults: '**/target/surefire-reports/*.xml'
+        always {
+            archiveArtifacts artifacts: '**/target/calculator-1.0-SNAPSHOT.jar', followSymlinks: false
+            junit stdioRetention: 'ALL', testResults: '**/target/surefire-reports/*.xml'
+        }
     }
 }
