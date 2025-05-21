@@ -58,10 +58,8 @@ pipeline {
                 // Execute a shell script to run the calculator JAR with parameters.
                 // The parameters are accessed using the 'params.' prefix.
                 // BUILD_ID is a built-in Jenkins environment variable.
-                sh """
-                    #!/bin/bash
-                    set -f # turns off echoing
-                    echo "      Build: $BUILD_ID"
+                sh """#!/bin/bash
+                    echo "        Build: $BUILD_ID"
                     echo "    Operation: ${params.OPERATION}"
                     echo " First number: ${params.NUMBER_1}"
                     echo "Second number: ${params.NUMBER_2}"
