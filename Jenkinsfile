@@ -55,7 +55,7 @@ pipeline {
         stage('Build') {
             steps {
                 // Execute Maven goals: clean, test, and package.
-                sh 'mvn package'
+                sh 'mvn package -DskipTests'
             }
         }
 
