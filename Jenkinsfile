@@ -5,7 +5,8 @@ pipeline {
     agent any
 
     // Define the tools to use
-    // The 'maven-X.Y.Z' tool must be configured in Jenkins Global Tool Configuration
+    // The 'maven-X.Y.Z' tool must be configured
+    // in Jenkins Global Tool Configuration
     // where 'X.Y.Z' is the latest version of Maven.
     tools {
       maven 'maven-3.9.9'
@@ -35,14 +36,6 @@ pipeline {
 
     // Define the stages of the pipeline.
     stages {
-        // Stage for checking out the source code from Git.
-//        stage('Checkout') {
-//            steps {
-//                // Checkout the source code from the specified Git repository and branch.
-//                git branch: 'main', url: 'https://github.com/managedkaos/java-calculator.git'
-//            }
-//        }
-
         // Stage for building the Java project using Maven.
         stage('Test') {
             steps {
