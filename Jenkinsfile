@@ -1,40 +1,72 @@
+// Define the Jenkins pipeline using the declarative syntax.
 pipeline {
-  agent any
-  stages {
-    stage('Checkout Scm') {
-      steps {
-        git 'https://github.com/managedkaos/java-calculator.git'
-      }
+    // Specify the agent where the pipeline will run.
+    // 'any' means the pipeline can run on any available agent.
+    agent any
+
+    // Define the tools to use
+    tools {
+      git 'Default'
+      maven 'maven-3.9.9'
     }
 
-    stage('Maven Build 0') {
-      steps {
-        sh 'mvn clean test package'
-      }
+    // Define parameters that can be passed to the pipeline.
+    parameters {
+        // Choice parameter for the calculator operation.
+        choice(
+            name: 'OPERATION',
+            choices: ['add', 'subtract', 'multiply', 'divide'],
+            description: 'Select the calculator operation to perform.'
+        )
+        // String parameter for the first number.
+        string(
+            name: 'NUMBER_1',
+            defaultValue: '10',
+            description: 'First number for calculation.'
+        )
+        // String parameter for the second number.
+        string(
+            name: 'NUMBER_2',
+            defaultValue: '5',
+            description: 'Second number for calculation.'
+        )
     }
 
-    stage('Shell script 1') {
-      steps {
-        sh '''#!/bin/bash
-echo "Executing calculator with operation: $OPERATION, numbers: $NUMBER_1 and $NUMBER_2"
-java -jar target/calculator-1.0-SNAPSHOT.jar $OPERATION $NUMBER_1 $NUMBER_2'''
-      }
-    }
+    // Define the stages of the pipeline.
+    stages {
+        // Stage for checking out the source code from Git.
+        stage('Checkout') {
+            steps {
+                // Checkout the source code from the specified Git repository and branch.
+                git branch: 'main', url: 'https://github.com/managedkaos/java-calculator.git'
+            }
+        }
 
-  }
-  tools {
-    maven 'maven-3.9.9'
-  }
-  post {
-    always {
-      step(artifacts: '**/target/calculator-1.0-SNAPSHOT.jar', followSymlinks: false, $class: 'ArtifactArchiver')
-      step(allowEmptyResults: true, keepProperties: true, stdioRetention: 'ALL', checksName: '', keepTestNames: true, $class: 'JUnitResultArchiver', testResults: '**/target/surefire-reports/*.xml')
-    }
+        // Stage for building the Java project using Maven.
+        stage('Build') {
+            steps {
+                // The 'maven-3.9.9' tool must be configured in Jenkins Global Tool Configuration.
+                // Execute Maven goals: clean, test, and package.
+                sh 'mvn clean test package'
+            }
+        }
 
-  }
-  parameters {
-    choice(name: 'OPERATION', choices: [add, subtract, multiply, divide], description: 'Select the calculator operation to perform')
-    string(name: 'NUMBER_1', defaultValue: '10', description: 'First number for calculation')
-    string(name: 'NUMBER_2', defaultValue: '5', description: 'Second number for calculation')
-  }
+        // Stage for running the calculator application.
+        stage('Run Calculator') {
+            steps {
+                // Execute a shell script to run the calculator JAR with parameters.
+                // The parameters are accessed using the 'params.' prefix.
+                // BUILD_ID is a built-in Jenkins environment variable.
+                sh """
+                    #!/bin/bash
+                    set -f # turns off echoing
+                    echo "      Build: $BUILD_ID"
+                    echo "    Operation: ${params.OPERATION}"
+                    echo " First number: ${params.NUMBER_1}"
+                    echo "Second number: ${params.NUMBER_2}"
+                    java -jar target/calculator-1.0-SNAPSHOT.jar ${params.OPERATION} ${params.NUMBER_1} ${params.NUMBER_2}
+                """
+            }
+        }
+    }
 }
