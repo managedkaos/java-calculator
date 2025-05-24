@@ -36,6 +36,14 @@ calculator/
 - Java 21 or higher
 - Maven 3.6 or higher
 
+### Testing the Project
+
+```bash
+mvn test
+```
+
+This will run all unit tests.
+
 ### Building the Project
 
 ```bash
