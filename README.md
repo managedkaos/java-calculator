@@ -81,13 +81,6 @@ Required:
   - Choices: `add`, `subtract`, `multiply`, `divide`
   - Description: "Select the calculator operation to perform"
 
-Optional:
-
-- Name: `TEST_LEVEL`
-  - Choices: `unit`, `integration`, `all`
-  - Default: `unit`
-     - Description: "Level of testing to perform"
-
 ### String Parameters:
 
 Required:
@@ -100,42 +93,6 @@ Required:
   - Default value: `5`
   - Description: "Second number for calculation"
 
-### Boolean Parameters:
-
-- Name: `CREATE_JAVADOC`
-  - Default: `false`
-  - Description: "Generate JavaDoc documentation"
-
-### Maven Build Command
-
-Replace the simple Maven build step with this parametrized version:
-
-```bash
-echo "Running tests at level: $TEST_LEVEL"
-
-case "$TEST_LEVEL" in
- "unit")
-   # Run only unit tests
-   mvn clean package -Dtest=Calculator*Test
-   ;;
- "integration")
-   # For demo purposes - in real project you'd have integration tests
-   echo "Note: No actual integration tests exist yet, running standard tests"
-   mvn clean package
-   ;;
- "all")
-   # Run all tests
-   mvn clean package
-   ;;
-esac
-
-# Generate JavaDoc if requested
-if [ "$CREATE_JAVADOC" = "true" ]; then
-  echo "Generating JavaDoc documentation"
-  mvn javadoc:javadoc
-fi
-```
-
 ### Running the JAR with Parameters
 
 Replace the JAR execution step with this parametrized version:
@@ -144,4 +101,3 @@ Replace the JAR execution step with this parametrized version:
 echo "Executing calculator with operation: $OPERATION, numbers: $NUMBER_1 and $NUMBER_2"
 java -jar target/calculator-1.0-SNAPSHOT.jar $OPERATION $NUMBER_1 $NUMBER_2
 ```
-
