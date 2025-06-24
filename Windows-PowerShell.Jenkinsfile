@@ -55,27 +55,23 @@ pipeline {
         // Stage for running the calculator application.
         stage('Deploy') {
             steps {
-                // Execute a shell script to run the calculator JAR with parameters.
-                // The parameters are accessed using the 'params.' prefix.
-                // BUILD_ID is a built-in Jenkins environment variable.
-                // Use 'bat' for Windows batch scripting
-                bat """
-                    @echo off
-                    echo         Build: %BUILD_ID%
-                    echo     Operation: %OPERATION%
-                    echo  First number: %NUMBER_1%
-                    echo Second number: %NUMBER_2%
+                // Use PowerShell for more reliable parameter handling on Windows
+                powershell """
+                    Write-Host "        Build: $env:BUILD_ID"
+                    Write-Host "    Operation: $env:OPERATION"
+                    Write-Host " First number: $env:NUMBER_1"
+                    Write-Host "Second number: $env:NUMBER_2"
 
-                    REM Fallback to default values if parameters are not set
-                    if "%OPERATION%"=="" set OPERATION=add
-                    if "%NUMBER_1%"=="" set NUMBER_1=10
-                    if "%NUMBER_2%"=="" set NUMBER_2=5
+                    # Fallback to default values if parameters are not set
+                    if (-not $env:OPERATION) { $env:OPERATION = 'add' }
+                    if (-not $env:NUMBER_1) { $env:NUMBER_1 = '10' }
+                    if (-not $env:NUMBER_2) { $env:NUMBER_2 = '5' }
 
-                    echo Using operation: %OPERATION%
-                    echo Using first number: %NUMBER_1%
-                    echo Using second number: %NUMBER_2%
+                    Write-Host "Using operation: $env:OPERATION"
+                    Write-Host "Using first number: $env:NUMBER_1"
+                    Write-Host "Using second number: $env:NUMBER_2"
 
-                    java -jar target\\calculator-1.0-SNAPSHOT.jar %OPERATION% %NUMBER_1% %NUMBER_2%
+                    java -jar target\\calculator-1.0-SNAPSHOT.jar $env:OPERATION $env:NUMBER_1 $env:NUMBER_2
                 """
             }
         }
