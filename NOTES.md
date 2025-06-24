@@ -11,7 +11,7 @@ A simple yet functional command-line calculator application built with Java and 
 
 ## Project Structure
 
-```
+```bash
 calculator/
 ├── pom.xml
 ├── Jenkinsfile
@@ -60,7 +60,7 @@ This will:
 
 The resulting JAR file will be located at:
 
-```
+```bash
 target/calculator-1.0-SNAPSHOT.jar
 ```
 
