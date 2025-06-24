@@ -111,8 +111,10 @@ java -jar target/calculator-1.0-SNAPSHOT.jar $OPERATION $NUMBER_1 $NUMBER_2
    - **Repository URL**: Enter the repository URL for this project
    - **Branches to build**: Specify `*/main`
    - **Script Path**:
-    - For Windows systems, enter [`Windows.Jenkinsfile`](./Windows.Jenkinsfile)
-    - For non-Windows systems, enter [`Jenkinsfile`](./Jenkinsfile)
+
+     - For Windows systems, enter [`Windows.Jenkinsfile`](./Windows.Jenkinsfile)
+     - For non-Windows systems, enter [`Jenkinsfile`](./Jenkinsfile)
+
    - **Lightweight checkout**: Leave unchecked
 
 1. **Save the job configuration**
