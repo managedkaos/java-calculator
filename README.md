@@ -22,7 +22,7 @@ You should have the following in place before you start:
   - Git
   - Maven
 
-## Jenkins Job Configuration
+## Freestyle Job Configuration
 
 1. **Create a new freestyle job**:
    - Go to Jenkins Dashboard
@@ -37,8 +37,9 @@ You should have the following in place before you start:
    - Specify the `*/main` branch
 
 1. **Build Steps**:
-   - Add "Invoke top-level Maven targets" build step
-   - Goals: `clean test package`
+   - Add a build step using **Invoke top-level Maven targets**.
+   - Under **Maven Version**, select the version of Maven configured for the system.
+   - Add the following under **Goals**: `clean test package`
 
 1. **Additional Build Step** (to run the JAR):
    - macOS, Linux and Docker: Add "Execute shell" build step
@@ -51,27 +52,20 @@ You should have the following in place before you start:
    - Add "Archive the artifacts"
    - Files to archive: `**/target/calculator-1.0-SNAPSHOT.jar`
 
-## Sample Build Commands
+1. Save and run the job.
 
-Here's a sequence of commands that your Jenkins job will essentially run:
+1. Review the console output.  A successful run should include text simliar to the following:
 
-```bash
-# Clean, compile, test, and package with Maven
-mvn clean test package
+  ```text
+  + java -jar target/calculator-1.0-SNAPSHOT.jar add 10 5
+  Result of 10.00 + 5.00 = 15.00
+  Archiving artifacts
+  Recording test results
+  ```
 
-# Run the executable JAR
-java -jar target/calculator-1.0-SNAPSHOT.jar add 10 5
-```
+## Freestyle Job Configuration with Parameters
 
-Expected output from running the JAR:
-
-```
-Result of 10.00 + 5.00 = 15.00
-```
-
-## Jenkins Job Configuration with Parameters
-
-Add the following parameters to your Jenkins job:
+Add the following parameters to your freestyle job:
 
 ### Choice Parameters:
 
