@@ -7,12 +7,14 @@ A simple yet functional command-line calculator application built with Java and 
 - Maven configuration for building, testing, and packaging
 - An executable JAR file
 - Sample Jenkins freestyle job configuration
+- Sample Jenkins pipeline job configuration ([Jenkinsfile](./Jenkinsfile)) using the declarative pipeline format
 
 ## Project Structure
 
 ```
 calculator/
 ├── pom.xml
+├── Jenkinsfile
 ├── src/
 │   ├── main/
 │   │   └── java/
@@ -107,7 +109,7 @@ java -jar target/calculator-1.0-SNAPSHOT-jar-with-dependencies.jar divide 10 5
 
 ## Jenkins Integration
 
-This project is designed to work well with Jenkins freestyle jobs. See the [README](./README.md) for more details on how to set up a Jenkins job to build and test this project.
+This project is designed to work well with Jenkins jobs. See the [README](./README.md) for more details on how to set up a Jenkins job to build and test this project.
 
 ## Extending the Project
 
@@ -118,4 +120,3 @@ Some ideas for extending this project:
 - Implement a more complex calculator with memory functions
 - Add a simple web interface using Spring Boot
 - Implement continuous integration with automated releases
-
