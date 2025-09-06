@@ -1,0 +1,66 @@
+// Alternative approach using dir step
+pipeline {
+    agent any
+
+    tools {
+        maven 'maven-3.9.9'
+    }
+
+    parameters {
+        choice(
+            name: 'OPERATION',
+            choices: ['add', 'subtract', 'multiply', 'divide'],
+            description: 'Select the calculator operation to perform.'
+        )
+        string(
+            name: 'NUMBER_1',
+            defaultValue: '10',
+            description: 'First number for calculation.'
+        )
+        string(
+            name: 'NUMBER_2',
+            defaultValue: '5',
+            description: 'Second number for calculation.'
+        )
+    }
+
+    stages {
+        stage('Test') {
+            steps {
+                // Change to subdirectory and run Maven
+                dir('jdk-17') {
+                    sh 'mvn clean test'
+                }
+            }
+        }
+
+        stage('Build') {
+            steps {
+                dir('jdk-17') {
+                    sh 'mvn package -DskipTests'
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                dir('jdk-17') {
+                    sh """#!/bin/bash
+                        echo "        Build: $BUILD_ID"
+                        echo "    Operation: ${params.OPERATION}"
+                        echo " First number: ${params.NUMBER_1}"
+                        echo "Second number: ${params.NUMBER_2}"
+                        java -jar target/calculator-1.0-SNAPSHOT.jar ${params.OPERATION} ${params.NUMBER_1} ${params.NUMBER_2}
+                    """
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            archiveArtifacts artifacts: '**/jdk-17/target/calculator-1.0-SNAPSHOT.jar',
+                followSymlinks: false
+        }
+    }
+}
